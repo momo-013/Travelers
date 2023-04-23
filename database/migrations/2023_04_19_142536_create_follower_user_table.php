@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('follower_user', function (Blueprint $table) {
             $table->unsignedInteger('user_id')->constrained();
-            $table->unsigmedInteger('follower_id')->constrained();
+            $table->unsignedInteger('follower_id')->constrained();
         });
     }
 
