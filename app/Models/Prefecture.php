@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Post;
+use App\Models\Region;
 
 class Prefecture extends Model
 {
@@ -12,5 +14,10 @@ class Prefecture extends Model
     public function posts()
     {
         return $this->hasMany(Post::class);
+    }
+    
+    public function regions()
+    {
+        return $this->hasMany(Region::class);
     }
 }

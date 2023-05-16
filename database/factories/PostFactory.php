@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Faker\Generator as Faker;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Post>
@@ -17,12 +18,12 @@ class PostFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => 1,
+            'user_id' => fake()->numberBetween(1,50),
             'place' => fake()->text($maxNbChars = 6),
-            'star' => 4,
+            'star' => fake()->numberBetween(1,5),
             'title' => fake()->word,
-            'body' => fake()->text($maxNbChars = 10),
-            'prefecture_id' => 1,
+            'body' => fake()->text($maxNbChars = 30),
+            'prefecture_id' => fake()->numberBetween(1,47)
      
          
         ];
