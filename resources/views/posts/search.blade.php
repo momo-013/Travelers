@@ -1,6 +1,6 @@
+ <!DOCTYPE html>
 <x-app-layout>
-    <x-slot name="header">ホーム</x-slot>
-<!DOCTYPE html>
+    <x-slot name="header"></x-slot>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
@@ -8,19 +8,9 @@
 
         <!-- Fonts -->
         <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     </head>
-    <body class="antialised">
-        <!--検索機能-->
-        <div>
-            <form action="/posts/search" method="GET">
-                @csrf
-                <input type="text" name="keyword" placeholder="旅先を入力" >
-                <button type="submit">検索</button>
-            </form>
-        </div>
-        <h1>すべて</h1>
+    <body class="">
         <div class='posts'>
             @foreach ($posts as $post)
                 <div class='post'>

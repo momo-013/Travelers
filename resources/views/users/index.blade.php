@@ -1,5 +1,5 @@
 <x-app-layout>
-    <x-slot name="header">ホーム</x-slot>
+    <x-slot name="header">マイページ</x-slot>
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -8,24 +8,23 @@
 
         <!-- Fonts -->
         <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     </head>
     <body class="antialised">
-        <!--検索機能-->
-        <div>
-            <form action="/posts/search" method="GET">
-                @csrf
-                <input type="text" name="keyword" placeholder="旅先を入力" >
-                <button type="submit">検索</button>
-            </form>
+        <div class='profile'>
+            <p>{{ Auth()->user()->name }}</p>
+            <p class=''>
+            　　{{ $posts->count() }}投稿　　{{ auth()->user()->followers->count() }}フォロワー　　{{ auth()->user()->followings()->count() }}フォロー
+            </p>
         </div>
-        <h1>すべて</h1>
+        <div>
+            @if($posts->isEmpty())
+            <p>まだ投稿がありません</p>
+            @endif
+        </div>
         <div class='posts'>
             @foreach ($posts as $post)
-                <div class='post'>
-                    <a href="{{ route('users.show', $post->user_id)}}">{{ $post->user->name }}</a>
-                    
+                    <p>{{ $post->user->name }}</p>
                     <p class='edit'>
                         @if(Auth()->user()->id== $post->user_id)
                         <a href="/posts/{{ $post->id }}/edit">編集</a>
@@ -38,7 +37,6 @@
                         <button type="button" onclick="deletePost({{ $post->id }})">削除</button>
                         @endif
                     </form>
-                    <!--画像-->
                     @if($post->images())
                         @foreach($post->images as $image)
                     <div>
@@ -51,18 +49,13 @@
                     <p class='star'>{{ $post->star }}</p>
                     <h3 class='title'>{{ $post->title}}</h3>
                     <p class='body'>{{ $post->body}}</p>
-                    <!--コメント-->
-                    <a href="/posts/{{ $post->id }}/reply">
-                        
-                        <span class="material-icons">comment</span>
-                    </a>
-                    <!--いいね機能-->
+                     <!--いいね機能-->
                     <span>
                         <img src="{{ asset('https://biz.addisteria.com/wp-content/uploads/2021/02/nicebutton.png')}}" width="20px">
                         @if($post->islike())
                             <a href="{{ route('unlike',$post) }}" class="btn btn-success btn-sm">
                                 <span class="badge1">
-                                    いいね取り消し{{ $post->likes->count() }}
+                                    いいね{{ $post->likes->count() }}
                                 </span>
                             </a>
                         @else
@@ -71,22 +64,17 @@
                                     いいね{{ $post->likes->count() }}
                                 </span>
                             </a>
-                        @endif    
-                    </span>
-                    <!--コメント表示-->
-                    <div class='reply'>
-                        @foreach($post->replies as $reply)
-                        <p>{{ $reply->user->name }}:{{ $reply->body }}</p>
-                        @endforeach
-                    </div>
-                    <!--コメント追加-->
+                        @endif  
+                    </span>    
+                    <!--コメント機能-->
                     <form action="{{ route('reply.store')}}" method="POST">
                         @csrf
                         <input type="text" name=reply[body] placeholder="コメントを追加">
-                        <button type="submit"><input type="hidden" value="{{ $post->id }}" name="reply[post_id]"/>
-                        送信</button>
+                        <button type="submit">
+                        <input type="hidden" value="{{ $post->id }}" name="reply[post_id]"/>
+                        送信
+                        </button>
                     </form>
-                </div>
              @endforeach   
         </div>
         <script>

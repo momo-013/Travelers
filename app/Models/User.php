@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Http\Models\Post;
+use App\Http\Models\Like;
+use App\Http\Models\Frined;
+use App\Http\Models\Reply;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
@@ -46,5 +51,33 @@ class User extends Authenticatable
     public function posts()
     {
         return $this->hasMany(Post::class);
+    }
+    
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
+    
+    public function replies()
+    {
+        return $this->hasMany(Reply::class);
+    }
+
+    //フォローしているユーザー
+    public function followings()
+    {
+        return $this->BelongsToMany('App\Models\User', 'friends', 'follower_id', 'followee_id');
+    }
+    
+    //フォロワー
+    public function followers()
+    {
+        return $this->BelongsToMany('App\Models\User', 'friends', 'followee_id', 'follower_id');
+    }
+    
+    //フォローしているかどうか判別
+    public function isfollow(): bool
+    {
+        return Friend::where('follower_id',Auth::id())->where('followee_id', $this->id)->first()!==null;
     }
 }

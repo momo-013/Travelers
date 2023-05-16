@@ -17,6 +17,15 @@
         <form action="/posts/{{ $post->id }}" method="POST">
             @csrf
             @method('PUT')
+            <div class="prefecture">
+                <select name="post[prefecture_id]">
+                    <option value="{{ $post->prefecture->id}}" selected>{{ $post->prefecture->name }}</option>
+                    @foreach($prefectures as $prefecture)
+                        <option value="{{ $prefecture->id }}">{{ $prefecture->name}}</option>
+                    @endforeach    
+                </select>
+                 <p class="prefecture_id_error" style="color:red">{{ $errors -> first('post.prefecture_id') }}</p>
+            </div>
             <div class="content_place">
                 <h2>Place</h2>
                 <input type="text" name=post[place] placeholder="スポットを入力" value="{{ $post->place }}"></input>
