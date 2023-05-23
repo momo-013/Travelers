@@ -15,7 +15,7 @@ class PostController extends Controller
 {
     public function index(Post $post)
     {
-        $posts = $post->ranking();
+        $posts = $post->get();
         return view('posts/index')->with(['posts' => $posts]);
     }
     
@@ -31,14 +31,16 @@ class PostController extends Controller
         $post->fill($input)->save();
         //画像保存処理
         $images = $request->file('images');
-        foreach($images as $image)
-        {   
+        if ($images){
+            foreach($images as $image){   
             $input_image['image_url'] = Cloudinary::upload($image->getRealPath(),['width' => 200,'height' => 200])->getSecurePath();
             $input_image['post_id'] = $post->id;
             $image_model->image_url = $input_image['image_url'];
             $image_model->post_id = $input_image['post_id'];
             $image_model->save();
+            }
         }
+        
         
         
         return redirect('/');
@@ -89,5 +91,14 @@ class PostController extends Controller
         
         return view('posts/search')->with(['posts'=> $posts ]);
     }
+    
+    public function likes(Post $post)
+    {
+        
+        // $like_posts = Auth::user()->likes()->get();
+        $like_posts = Auth::user()->likeposts;
+        return view('posts/likes')->with(['posts'=>$like_posts]);
+    }
 }
+
 

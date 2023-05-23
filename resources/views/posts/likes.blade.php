@@ -1,4 +1,6 @@
- <!DOCTYPE html>
+
+    <!--<x-slot name="header">ホーム</x-slot>-->
+<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
@@ -6,13 +8,22 @@
 
         <!-- Fonts -->
         <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link href="https://use.fontawesome.com/releases/v6.4.0/css/all.css" rel="stylesheet">
         <link rel="stylesheet" href="/css/style.css" >
 
-    </head><body class="antialised">
+    </head>
+    <body class="">
         <div class="app">
             <div class='posts'>
-    
+                <h1 class='title'>いいねした投稿</h1>
+                
+                 <div>
+                    @if($posts->isEmpty())
+                    <p>いいねした投稿がありません</p>
+                    @endif
+                </div>
+                
                 @foreach ($posts as $post)
                     <div class='post'>
                         <!--user name-->
@@ -135,3 +146,4 @@
         </div>
     </body>
 </html>
+
