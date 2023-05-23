@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use App\Http\Models\Post;
-use App\Http\Models\Like;
-use App\Http\Models\Frined;
-use App\Http\Models\Reply;
+use App\Models\Post;
+use App\Models\Like;
+use App\Models\Frined;
+use App\Models\Reply;
 use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
@@ -56,6 +56,11 @@ class User extends Authenticatable
     public function likes()
     {
         return $this->hasMany(Like::class);
+    }
+    
+    public function likeposts()
+    {
+        return $this->belongsToMany(Post::class);
     }
     
     public function replies()

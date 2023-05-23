@@ -4,12 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Http\Models\User;
-use App\Http\Models\Post;
+use App\Models\User;
+use App\Models\Post;
 
 class Like extends Model
 {
     use HasFactory;
+    
+    protected $table = 'post_user';
     
     public function user()
     {

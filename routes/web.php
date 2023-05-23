@@ -37,6 +37,7 @@ Route::controller(Postcontroller::class)->middleware(['auth'])->group( function 
     Route::delete('posts/{post}','delete')->name('delete');
     Route::get('/posts/{post}/reply','reply')->name('reply');
     Route::get('/posts/search','search')->name('search');
+    Route::get('posts/likes','likes')->name('post.likes');
 });
 
 //いいねボタン

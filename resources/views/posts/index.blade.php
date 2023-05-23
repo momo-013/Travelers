@@ -1,5 +1,5 @@
-<x-app-layout>
-    <x-slot name="header">ホーム</x-slot>
+
+    <!--<x-slot name="header">ホーム</x-slot>-->
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -9,96 +9,135 @@
         <!-- Fonts -->
         <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="https://use.fontawesome.com/releases/v6.4.0/css/all.css" rel="stylesheet">
+        <link rel="stylesheet" href="/css/style.css" >
 
     </head>
-    <body class="antialised">
-        <!--検索機能-->
-        <div>
-            <form action="/posts/search" method="GET">
-                @csrf
-                <input type="text" name="keyword" placeholder="旅先を入力" >
-                <button type="submit">検索</button>
-            </form>
-        </div>
-        <h1>すべて</h1>
-        <div class='posts'>
-            @foreach ($posts as $post)
-                <div class='post'>
-                    <a href="{{ route('users.show', $post->user_id)}}">{{ $post->user->name }}</a>
-                    
-                    <p class='edit'>
-                        @if(Auth()->user()->id== $post->user_id)
-                        <a href="/posts/{{ $post->id }}/edit">編集</a>
-                        @endif
-                    </p>
-                    <form action="/posts/{{ $post->id }}" id="form_{{ $post->id}}" method="post">
-                        @csrf
-                        @method('DELETE')
-                        @if(Auth()->user()->id== $post->user_id)
-                        <button type="button" onclick="deletePost({{ $post->id }})">削除</button>
-                        @endif
-                    </form>
-                    <!--画像-->
-                    @if($post->images())
-                        @foreach($post->images as $image)
-                    <div>
-                        <img src={{ $image->image_url }} alt="画像が読み込めません。"/>
-                    </div>
-                        @endforeach
-                    @endif
-                    <p class="prefecture">{{ $post->prefecture->name }}</p>
-                    <h2 class='place'>{{ $post->place }}</h2>
-                    <p class='star'>{{ $post->star }}</p>
-                    <h3 class='title'>{{ $post->title}}</h3>
-                    <p class='body'>{{ $post->body}}</p>
-                    <!--コメント-->
-                    <a href="/posts/{{ $post->id }}/reply">
+    <body class="">
+        <div class="app">
+            <div class='posts'>
+                <h1 class='title'>すべて</h1>
+                @foreach ($posts as $post)
+                    <div class='post'>
+                        <!--user name-->
+                        <a href="{{ route('users.show', $post->user_id)}}" class="username">{{ $post->user->name }}</a>
                         
-                        <span class="material-icons">comment</span>
-                    </a>
-                    <!--いいね機能-->
-                    <span>
-                        <img src="{{ asset('https://biz.addisteria.com/wp-content/uploads/2021/02/nicebutton.png')}}" width="20px">
-                        @if($post->islike())
-                            <a href="{{ route('unlike',$post) }}" class="btn btn-success btn-sm">
-                                <span class="badge1">
-                                    いいね取り消し{{ $post->likes->count() }}
+                        <!--編集-->
+                        @if(Auth()->user()->id== $post->user_id)
+                            <form action="/posts/{{ $post->id }}/edit" class="edit">
+                            <button type="submit">編集</button>
+                            </form>
+                        @endif
+                        
+                        <!--削除-->
+                        <form action="/posts/{{ $post->id }}" id="form_{{ $post->id}}" method="post" class="delete">
+                            @csrf
+                            @method('DELETE')
+                                @if(Auth()->user()->id== $post->user_id)
+                                <button type="button" onclick="deletePost({{ $post->id }})">削除</button>
+                                @endif
+                        </form>
+                        
+                        <!--画像-->
+                        @if($post->images())
+                            @foreach($post->images as $image)
+                                <div class="images">
+                                    <img src={{ $image->image_url }} alt="画像が読み込めません。"/>
+                                </div>
+                            @endforeach
+                        @endif
+                        
+                        <div class="post-body">
+                            <div class="post-info">
+                                <p class="prefecture"><i class="fa-solid fa-location-dot"></i>{{ $post->prefecture->name }}</p>
+                                <p class='star'><i class="fa-solid fa-star"></i>{{ $post->star }}</p>
+                            </div>
+                            
+                            <div class="post-icons">
+                                <!--コメント--> 
+                                <a href="" class="comment"> 
+                                    <i-1 class="fa-regular fa-comment"></i-1>
+                                </a>
+                                
+                                <!--いいね機能-->
+                                <span class="">
+                                    @if($post->islike())
+                                        <a href="{{ route('unlike',$post) }}" class="likes">
+                                            <span class="unlike">
+                                                <i-1 class="fa-solid fa-heart"></i-1>
+                                            </span>
+                                            {{ $post->likes->count() }}
+                                        </a>
+                                    @else
+                                        <a href="{{ route('like',$post) }}" class="likes">
+                                            <span class="like">
+                                                <i-1 class="fa-regular fa-heart"></i-1>
+                                            </span>
+                                            {{ $post->likes->count() }}
+                                        </a>
+                                    @endif    
                                 </span>
-                            </a>
-                        @else
-                            <a href="{{ route('like',$post) }}" class="btn btn-secondary btn-sm">
-                                <span class="badge2">
-                                    いいね{{ $post->likes->count() }}
-                                </span>
-                            </a>
-                        @endif    
-                    </span>
-                    <!--コメント表示-->
-                    <div class='reply'>
-                        @foreach($post->replies as $reply)
-                        <p>{{ $reply->user->name }}:{{ $reply->body }}</p>
-                        @endforeach
+                            </div>
+                        </div>
+                        
+                        
+                        <h4 class='place'>{{ $post->place }}</h4>
+                        <!--<h3 class='title'>{{ $post->title}}</h3>-->
+                        <p class='body'>{{ $post->body}}</p>
+                        
+                        <!--コメント表示-->
+                        <div class='reply'>
+                            @foreach($post->replies as $reply)
+                            <p>{{ $reply->user->name }}:{{ $reply->body }}</p>
+                            @endforeach
+                        </div>
+                        <!--コメント追加-->
+                        <form action="{{ route('reply.store')}}" method="POST">
+                            @csrf
+                            <input class="addComment" type="text" name=reply[body] placeholder="コメントを追加">
+                            <button class="postComment"type="submit"><input type="hidden" value="{{ $post->id }}" name="reply[post_id]"/>
+                            送信</button>
+                        </form>
                     </div>
-                    <!--コメント追加-->
-                    <form action="{{ route('reply.store')}}" method="POST">
-                        @csrf
-                        <input type="text" name=reply[body] placeholder="コメントを追加">
-                        <button type="submit"><input type="hidden" value="{{ $post->id }}" name="reply[post_id]"/>
-                        送信</button>
+                 @endforeach   
+            </div>
+            
+            <div class="navigation">
+                <h1 style="margin-left: 25px">Travelers</h1>
+                <div class=navigationMenu>
+                    <form  action="/posts/search" method="GET">
+                    @csrf
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input class="search" type="text" name="keyword" placeholder="旅先を入力" >
+                    <button class="postSearch" type="submit">検索</i></button>
                     </form>
+                        <a href="/"><i class="fa-solid fa-house"></i>ホーム</a><br>
+                        <a href="/posts/create"><i class="fa-solid fa-square-plus"></i>投稿</a><br>
+                        <a href="/posts/likes"><i class="fa-solid fa-heart"></i>いいね</a><br>
+                        <a href=""><i class="fa-solid fa-plane"></i>旅行計画</a><br>
+                        <a href="/user"><i class="fa-solid fa-user"></i>マイページ</a><br>
+                        
+                        <form method="POST" action="{{ route('logout') }}" class="logout">
+                            @csrf
+
+                            <x-dropdown-link :href="route('logout')"
+                                    onclick="event.preventDefault();
+                                                this.closest('form').submit();" class='logout'>
+                                {{ __('ログアウト') }}
+                            </x-dropdown-link>
+                        </form>
                 </div>
-             @endforeach   
-        </div>
-        <script>
-            function deletePost(id){
-                'use strict'
-                
-                if (confirm('削除すると復元できません。')){
-                    document.getElementById(`form_${id}`).submit();
+            </div>
+            <script>
+                function deletePost(id){
+                    'use strict'
+                    
+                    if (confirm('削除すると復元できません。')){
+                        document.getElementById(`form_${id}`).submit();
+                    }
                 }
-            }
-        </script>  
+            </script>  
+        </div>
     </body>
 </html>
 
-</x-app-layout>
