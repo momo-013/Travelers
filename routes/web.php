@@ -19,13 +19,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
 
 //home
 Route::controller(Postcontroller::class)->middleware(['auth'])->group( function () {
@@ -37,7 +38,7 @@ Route::controller(Postcontroller::class)->middleware(['auth'])->group( function 
     Route::delete('posts/{post}','delete')->name('delete');
     Route::get('/posts/{post}/reply','reply')->name('reply');
     Route::get('/posts/search','search')->name('search');
-    Route::get('posts/likes','likes')->name('post.likes');
+    Route::get('posts/likes','likes')->name('likes');
 });
 
 //いいねボタン

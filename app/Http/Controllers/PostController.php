@@ -30,18 +30,18 @@ class PostController extends Controller
         $input['user_id'] = Auth::id();
         $post->fill($input)->save();
         //画像保存処理
+        
         $images = $request->file('images');
         if ($images){
             foreach($images as $image){   
-            $input_image['image_url'] = Cloudinary::upload($image->getRealPath(),['width' => 200,'height' => 200])->getSecurePath();
+            $input_image['image_url'] = Cloudinary::upload($image->getRealPath(),['width' => 190,'height' => 190])->getSecurePath();
             $input_image['post_id'] = $post->id;
-            $image_model->image_url = $input_image['image_url'];
-            $image_model->post_id = $input_image['post_id'];
-            $image_model->save();
+            $new_image_model = new Image();
+            $new_image_model->image_url = $input_image['image_url'];
+            $new_image_model->post_id = $input_image['post_id'];
+            $new_image_model->save();
             }
         }
-        
-        
         
         return redirect('/');
     }
@@ -96,7 +96,7 @@ class PostController extends Controller
     {
         
         // $like_posts = Auth::user()->likes()->get();
-        $like_posts = Auth::user()->likeposts;
+        $like_posts = Auth::user()->likeposts()->orderBy('created_at', 'desc')->get();
         return view('posts/likes')->with(['posts'=>$like_posts]);
     }
 }

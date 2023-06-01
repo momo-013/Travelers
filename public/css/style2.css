@@ -74,6 +74,13 @@ body {
             font-size: 14px;
             margin: 0;
         }
+        
+    @media (max-width: 600px) {
+        .create-body {
+            display: flex;
+            flex-direction: column;
+        }
+    }
    
     .star{
         font-size: 40px;

@@ -4,8 +4,9 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>Travelers</title>
-
+        <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
         <!-- Fonts -->
         <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -39,13 +40,15 @@
                         </form>
                         
                         <!--画像-->
+                        <div class='images'>
                         @if($post->images())
                             @foreach($post->images as $image)
-                                <div class="images">
+                                <div class="image">
                                     <img src={{ $image->image_url }} alt="画像が読み込めません。"/>
                                 </div>
                             @endforeach
                         @endif
+                        </div>
                         
                         <div class="post-body">
                             <div class="post-info">
@@ -62,14 +65,14 @@
                                 <!--いいね機能-->
                                 <span class="">
                                     @if($post->islike())
-                                        <a href="{{ route('unlike',$post) }}" class="likes">
+                                        <a href="{{ route('unlike',$post) }}" class="likes like-link" data-post_id="{{ $post->id }}">
                                             <span class="unlike">
                                                 <i-1 class="fa-solid fa-heart"></i-1>
                                             </span>
                                             {{ $post->likes->count() }}
                                         </a>
                                     @else
-                                        <a href="{{ route('like',$post) }}" class="likes">
+                                        <a href="{{ route('like',$post) }}" class="likes like-link" data-post_id="{{ $post->id }}">
                                             <span class="like">
                                                 <i-1 class="fa-regular fa-heart"></i-1>
                                             </span>
@@ -137,6 +140,7 @@
                     }
                 }
             </script>  
+            <script src='like.js'></script>
         </div>
     </body>
 </html>

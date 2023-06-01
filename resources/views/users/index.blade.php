@@ -14,18 +14,25 @@
         
         
     <body class="antialised">
-        <div class='posts'>
+        
             <div class='profile'>
+                <form action='/profile' method='GET'>
+                    @csrf
+                    <button type='submit' class='edit-profile'>プロフィールを編集</button>
+                </form>
                 <p class='username'>{{ Auth()->user()->name }}</p>
+                
                 <p class=''>{{ $posts->count() }}投稿　　 {{ auth()->user()->followers->count() }}フォロワー　　 {{ auth()->user()->followings()->count() }}フォロー</p>
-            </div>
+            
+            
             
             <div>
                 @if($posts->isEmpty())
                 <p>まだ投稿がありません</p>
                 @endif
             </div>
-    
+            </div>
+            <div class='posts'>
                 @foreach ($posts as $post)
                     <div class='post'>
                         <!--user name-->
@@ -47,14 +54,16 @@
                                 @endif
                         </form>
                         
-                        <!--画像-->
-                        @if($post->images())
-                            @foreach($post->images as $image)
-                                <div>
-                                    <img src={{ $image->image_url }} alt="画像が読み込めません。"/>
-                                </div>
-                            @endforeach
-                        @endif
+                       <!--画像-->
+                        <div class='images'>
+                            @if($post->images())
+                                @foreach($post->images as $image)
+                                    <div class="image">
+                                        <img src={{ $image->image_url }} alt="画像が読み込めません。"/>
+                                    </div>
+                                @endforeach
+                            @endif
+                        </div>
                         
                         <div class="post-body">
                             <div class="post-info">
