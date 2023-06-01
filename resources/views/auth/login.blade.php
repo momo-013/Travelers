@@ -39,9 +39,13 @@
                 </a>
             @endif
 
+            <a href='/register' style=margin-left:10%;margin-right:5%>Sign up</a>
+            
             <x-primary-button class="ml-3">
                 {{ __('Log in') }}
             </x-primary-button>
+            
+            
         </div>
     </form>
 </x-guest-layout>

@@ -18,7 +18,7 @@
             <div class='posts'>
                 <h1 class='title'>いいねした投稿</h1>
                 
-                 <div>
+                 <div class='like-post'>
                     @if($posts->isEmpty())
                     <p>いいねした投稿がありません</p>
                     @endif
@@ -46,13 +46,15 @@
                         </form>
                         
                         <!--画像-->
+                        <div class='images'>
                         @if($post->images())
                             @foreach($post->images as $image)
-                                <div>
+                                <div class="image">
                                     <img src={{ $image->image_url }} alt="画像が読み込めません。"/>
                                 </div>
                             @endforeach
                         @endif
+                        </div>
                         
                         <div class="post-body">
                             <div class="post-info">

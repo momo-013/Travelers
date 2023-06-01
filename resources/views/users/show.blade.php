@@ -60,13 +60,15 @@
                     </form>
                     
                     <!--画像-->
-                    @if($post->images())
-                        @foreach($post->images as $image)
-                            <div>
-                                <img src={{ $image->image_url }} alt="画像が読み込めません。"/>
-                            </div>
-                        @endforeach
-                    @endif
+                    <div class='images'>
+                        @if($post->images())
+                            @foreach($post->images as $image)
+                                <div class="image">
+                                    <img src={{ $image->image_url }} alt="画像が読み込めません。"/>
+                                </div>
+                            @endforeach
+                        @endif
+                    </div>
                     
                     <div class="post-body">
                         <div class="post-info">
