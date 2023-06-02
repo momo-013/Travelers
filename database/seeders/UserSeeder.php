@@ -7,6 +7,8 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
+use Faker\Generator as Faker;
+
 
 use Illuminate\Support\Facades\Hash;
 class UserSeeder extends Seeder
@@ -26,7 +28,6 @@ class UserSeeder extends Seeder
                 'email_verified_at' => now(),
                 'password' => Hash::make('gesra7-niMmoq-gedneq'), // password
                 'remember_token' => Str::random(10),
-                'profile' => fake()->word,
             ]
             ]);
             
