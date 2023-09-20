@@ -11,7 +11,7 @@ class Like extends Model
 {
     use HasFactory;
     
-    protected $table = 'post_user';
+    protected $table = 'likes';
     
     public function user()
     {

@@ -15,7 +15,7 @@
     <body class="antialised">
         <div class='app'>
             <header class='header'>
-                <h2>Travelers</h2>
+                <h1>Travelers</h1>
                 <a href="/" onclick="return confirm('この内容は保存されません。')" class='cancel'>キャンセル</a>
             </header>
             
