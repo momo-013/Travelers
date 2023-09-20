@@ -3,14 +3,17 @@
     <head>
         <meta charset="utf-8">
         <title>Travelers</title>
-
+        <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <!-- Fonts -->
         <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
         <link href="https://use.fontawesome.com/releases/v6.4.0/css/all.css" rel="stylesheet">
         <link rel="stylesheet" href="/css/style.css" >
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
     </head>
-    <body class="antialised">
+    <body class="">
+     <div class="app">
         <div class='posts'>
             <!--フォロー機能-->
             <div class="follows">
@@ -28,7 +31,7 @@
             </div>
             
             <div class='profile'>
-                <p class='username'>{{ $user->name }}</p>
+                <p class='other-username'>{{ $user->name }}</p>
                 <p class=''>{{ $posts->count() }}投稿　　 {{ $user->followers->count() }}フォロワー　　 {{ $user->followings->count() }}フォロー</p>
             </div>
             
@@ -37,7 +40,8 @@
                 <p>まだ投稿がありません</p>
                 @endif
             </div>
-        
+            
+            
             @foreach ($posts as $post)
                 <div class='post'>
                     <!--user name-->
@@ -77,29 +81,59 @@
                         </div>
                         
                         <div class="post-icons">
-                            <!--コメント-->
-                            <a href="" class="comment">
-                                <i-1 class="fa-regular fa-comment"></i-1>
-                            </a>
+                            <!--コメント--> 
+                            <button type="button" class="icon showComment" data-bs-toggle="modal" data-bs-target="#exampleModal{{ $post->id }}" data-bs-whatever="@mdo" data-post-id="{{ $post->id }}"><i class="fa-regular fa-comment"></i></button>
+                            <!--モーダルダイアログ-->
+                            <div class="modal fade" id="exampleModal{{ $post->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                              <div class="modal-dialog">
+                                  
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <p class="modal-title" id="exampleModalLabel">{{ $post->user->name }}</p>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  </div>
+                                  
+                                  
+                                  <!-- HTML部分 -->
+                                    <div class="modal-body">
+                                        <p>{{ $post->user->name }}:{{ $post->body }}</p>
+                                        
+                                        <div class='reply' data-post-id="{{ $post->id }}">
+                                            @foreach($post->replies as $reply)
+                                            <p>{{ $reply->user->name }}:{{ $reply->body }}<a class="reply-link" data-username="{{ $reply->user->name }}">返信</a></p>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                            
+                                    <div class="modal-footer">
+                                        <form class="comment-form" action="{{ route('reply.store') }}" method="POST">
+                                            @csrf
+                                            <input class="reply-input" type="text" name="reply[body]" placeholder="コメントを追加">
+                                            <input type="hidden" value="{{ $post->id }}" name="reply[post_id]">
+                                            <button class="btn btn-primary postComment" type="submit" disabled> 送信</button>
+                                        </form>
+                                    </div>
+                                    
+                                </div>
+                              </div>
+                            </div>
                             
                             <!--いいね機能-->
-                            <span class="">
-                                @if($post->islike())
-                                    <a href="{{ route('unlike',$post) }}" class="likes">
-                                        <span class="unlike">
-                                            <i-1 class="fa-solid fa-heart"></i-1>
-                                        </span>
+                                <span class="like">
+                                    @if($post->islike())
+                                        <span class="likes">
+                                            <i-1 class="fa-regular fa-heart like-toggle liked" data-post-id="{{ $post->id }}"></i-1>
+                                        <span class='like-counter'>{{ $post->likes->count() }}</span>
+                                        </span><!-- /.likes -->
+                                    @else
+                                        <span class="likes">
+                                            <i-1 class="fa-regular fa-heart like-toggle" data-post-id="{{ $post->id }}"></i-1>
+                                        <span class='like-counter'>
                                         {{ $post->likes->count() }}
-                                    </a>
-                                @else
-                                    <a href="{{ route('like',$post) }}" class="likes">
-                                        <span class="like">
-                                            <i-1 class="fa-regular fa-heart"></i-1>
                                         </span>
-                                        {{ $post->likes->count() }}
-                                    </a>
-                                @endif    
-                            </span>
+                                        </span><!-- /.likes -->
+                                    @endif    
+                                </span>
                         </div>
                     </div>
                     
@@ -108,18 +142,18 @@
                     <!--<h3 class='title'>{{ $post->title}}</h3>-->
                     <p class='body'>{{ $post->body}}</p>
                     
-                    <!--コメント表示-->
-                    <div class='reply'>
-                        @foreach($post->replies as $reply)
-                        <p>{{ $reply->user->name }}:{{ $reply->body }}</p>
-                        @endforeach
+                    <!-- コメントを表示ボタン -->
+                    <div class='show-Comment'>
+                        <button type="button" class="showComment" data-bs-toggle="modal" data-bs-target="#exampleModal{{ $post->id }}" data-bs-whatever="@mdo" data-post-id="{{ $post->id }}">コメントを全て表示</button>
                     </div>
+                   
                     <!--コメント追加-->
-                    <form action="{{ route('reply.store')}}" method="POST">
+                    <!-- モーダル外のコメント追加フォーム -->
+                    <form class="comment-form-external" action="{{ route('reply.store.external') }}" method="POST">
                         @csrf
-                        <input class="addComment" type="text" name=reply[body] placeholder="コメントを追加">
-                        <button class="postComment"type="submit"><input type="hidden" value="{{ $post->id }}" name="reply[post_id]"/>
-                        送信</button>
+                        <input class="addComment" type="text" name="reply[body]" placeholder="コメントを追加">
+                        <input type="hidden" name="reply[post_id]" value="{{ $post->id }}">
+                        <button class="postComment postComment-external" type="submit" disabled>送信</button>
                     </form>
                 </div>
              @endforeach   
@@ -128,16 +162,16 @@
         <div class="navigation">
             <h1 style="margin-left: 25px">Travelers</h1>
             <div class=navigationMenu>
-                <form  action="/posts/search" method="GET">
-                @csrf
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input class="search" type="text" name="keyword" placeholder="旅先を入力" >
-                <button class="postSearch" type="submit">検索</i></button>
+                <form action="/posts/search" method="GET">
+                    @csrf
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input class="search" type="text" name="keyword" placeholder="旅先を入力">
+                    <button class="postSearch" type="submit" id="searchButton" disabled>検索</i></button>
                 </form>
                     <a href="/"><i class="fa-solid fa-house"></i>ホーム</a><br>
                     <a href="/posts/create"><i class="fa-solid fa-square-plus"></i>投稿</a><br>
                     <a href="/posts/likes"><i class="fa-solid fa-heart"></i>いいね</a><br>
-                    <a href=""><i class="fa-solid fa-plane"></i>旅行計画</a><br>
+                    <a href="/books/index"><i class="fa-solid fa-plane"></i>旅行計画</a><br>
                     <a href="/user"><i class="fa-solid fa-user"></i>マイページ</a><br>
                     <form method="POST" action="{{ route('logout') }}" class="logout">
                             @csrf
@@ -145,44 +179,21 @@
                             <x-dropdown-link :href="route('logout')"
                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();" class='logout'>
+                                <i class="fa-solid fa-right-from-bracket"></i>
                                 {{ __('ログアウト') }}
                             </x-dropdown-link>
                         </form>
             </div>
         </div>
-        <script>
-            function deletePost(id){
-                'use strict'
-                
-                if (confirm('削除すると復元できません。')){
-                    document.getElementById(`form_${id}`).submit();
-                }
-            }
-        </script>  
-        
-        
-        <!--<div class='posts'>-->
-        <!--    @foreach($posts as $post)-->
-        <!--        <div class='post'>-->
-        <!--            <h3>{{ $user->name }}</h3>-->
-        <!--            @if($post->images())-->
-        <!--                @foreach($post->images as $image)-->
-        <!--                    <div>-->
-        <!--                        <img src={{ $image->image_url }} alt="画像が読み込めません。"/>-->
-        <!--                    </div>-->
-        <!--                @endforeach-->
-        <!--            @endif-->
-        <!--            <p class="prefecture">{{ $post->prefecture->name }}</p>-->
-        <!--            <h2 class='place'>{{ $post->place }}</h2>-->
-        <!--            <p class='star'>{{ $post->star }}</p>-->
-        <!--            <h3 class='title'>{{ $post->title}}</h3>-->
-        <!--            <p class='body'>{{ $post->body}}</p>-->
-        <!--        </div>-->
-        <!--@endforeach-->
-        <!--</div>-->
-            
-        
-        
-        
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+        <script src="{{ asset('js/delete_confirm.js') }}"></script>
+        <script src="{{ asset('js/search_page.js') }}"></script>
+        <script src="{{ asset('js/like.js') }}"></script>
+        <script src="{{ asset('js/show_comment.js') }}"></script>
+        <script src="{{ asset('js/reply_link.js') }}"></script>
+        <script src="{{ asset('js/external_addComment.js') }}"></script>
+        <script src="{{ asset('js/modal_addComment.js') }}"></script>
+        <script src="{{ asset('js/avoid_reply.js') }}"></script>
+       </div>  
     </body>
 </html>

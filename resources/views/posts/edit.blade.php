@@ -14,7 +14,7 @@
     <body class="antialised">
         <div class="app">
          <header class='header'>
-             <h2>Travelers</h2>
+             <h1>Travelers</h1>
             <a href="/" class="cancel">キャンセル</a>
          </header>
          

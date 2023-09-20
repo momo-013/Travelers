@@ -21,8 +21,8 @@
         <div class="app">
             <div class='posts'>
                 <div class='headTitle'>
-                    <a><h1 class='title'>すべて</h1></a>
-                    <a href='/posts/follow'><h1 class='title_follow'>フォロー中</h1></a>
+                    <a href='/'><h1 class='title'>すべて</h1></a>
+                    <a><h1 class='title_follow'>フォロー中</h1></a>
                 </div>
                 @foreach ($posts as $post)
                     <div class='post'>
@@ -32,7 +32,7 @@
                         <!--編集-->
                         @if(Auth()->user()->id== $post->user_id)
                             <form action="/posts/{{ $post->id }}/edit" class="edit">
-                            <button type="submit" class="btnEdit">編集</button>
+                            <button type="submit">編集</button>
                             </form>
                         @endif
                         
@@ -41,7 +41,7 @@
                             @csrf
                             @method('DELETE')
                                 @if(Auth()->user()->id== $post->user_id)
-                                <button type="button" class="btnEdit" onclick="deletePost({{ $post->id }})">削除</button>
+                                <button type="button" onclick="deletePost({{ $post->id }})">削除</button>
                                 @endif
                         </form>
                         
@@ -63,7 +63,7 @@
                             </div>
                             
                             <div class="post-icons">
-                                <!--コメント--> 
+                                 <!--コメント--> 
                                     <button type="button" class="icon showComment" data-bs-toggle="modal" data-bs-target="#exampleModal{{ $post->id }}" data-bs-whatever="@mdo" data-post-id="{{ $post->id }}"><i class="fa-regular fa-comment"></i></button>
                                     <!--モーダルダイアログ-->
                                     <div class="modal fade" id="exampleModal{{ $post->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -116,6 +116,7 @@
                                         </span><!-- /.likes -->
                                     @endif    
                                 </span>
+                                
                             </div>
                         </div>
                         
@@ -151,7 +152,6 @@
                         <input class="search" type="text" name="keyword" placeholder="旅先を入力">
                         <button class="postSearch" type="submit" id="searchButton" disabled>検索</i></button>
                     </form>
-
                         <a href="/"><i class="fa-solid fa-house"></i>ホーム</a><br>
                         <a href="/posts/create"><i class="fa-solid fa-square-plus"></i>投稿</a><br>
                         <a href="/posts/likes"><i class="fa-solid fa-heart"></i>いいね</a><br>
@@ -172,16 +172,17 @@
             </div>
             
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-            <script src='js/delete_confirm.js'></script>
             
-            <script src='js/like.js'></script>
-            <script src='js/search_page.js'></script>
+            <script src="{{ asset('js/delete_confirm.js') }}"></script>
+            <script src="{{ asset('js/search_page.js') }}"></script>
+            <script src="{{ asset('js/like.js') }}"></script>
+            <script src="{{ asset('js/show_comment.js') }}"></script>
+            <script src="{{ asset('js/reply_link.js') }}"></script>
+            <script src="{{ asset('js/external_addComment.js') }}"></script>
+            <script src="{{ asset('js/modal_addComment.js') }}"></script>
+            <script src="{{ asset('js/avoid_reply.js') }}"></script>
+
             
-            <script src='js/show_comment.js'></script>
-            <script src='js/reply_link.js'></script>
-            <script src='js/external_addComment.js'></script>
-            <script src='js/modal_addComment.js'></script>
-            <script src='js/avoid_reply.js'></script>
         </div>
     </body>
 </html>

@@ -183,6 +183,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         CloudinaryLabs\CloudinaryLaravel\CloudinaryServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
         
 
         /*
@@ -213,6 +214,9 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
+        'InterventionImage' => Intervention\Image\Facades\Image::class,
     ])->toArray(),
+    
+    
 
 ];
