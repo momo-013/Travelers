@@ -19,7 +19,7 @@
     <body class="">
         <div class="app">
             <div class='posts'>
-                <h1 class='title'>いいねした投稿</h1>
+                <h3 class='title'>いいねした投稿</h3>
                 
                  <div class='like-post'>
                     @if($posts->isEmpty())
@@ -53,7 +53,7 @@
                         @if($post->images())
                             @foreach($post->images as $image)
                                 <div class="image">
-                                    <img src={{ $image->image_url }} alt="画像が読み込めません。"/>
+                                    <img src={{ asset($image->image_url) }} alt="画像が読み込めません。"/>
                                 </div>
                             @endforeach
                         @endif
