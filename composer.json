@@ -65,8 +65,7 @@
         }
     },
     "minimum-stability": "stable",
-    "prefer-stable": true
-    
+    "prefer-stable": true,
     "require": {
         "ext-gd": "*"
     }
